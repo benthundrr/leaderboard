@@ -5,7 +5,7 @@
 html,body{background:#0c0c0c!important;margin:0!important}
 body .w-embed,body [class*="embed"]{margin:0!important;padding:0!important;background:#0c0c0c!important}
 
-.tdr-lb-bg{background:#0c0c0c;width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;isolation:isolate;overflow:hidden;padding:60px 0}
+.tdr-lb-bg{background:#0c0c0c;width:100vw;position:relative;min-height:100vh;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;isolation:isolate;padding:60px 0}
 .tdr-lb-bg::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(1200px 800px at 50% 30%,#000 30%,transparent 80%);-webkit-mask-image:radial-gradient(1200px 800px at 50% 30%,#000 30%,transparent 80%)}
 .tdr-lb-bg::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(900px 600px at 50% 0%,rgba(255,13,74,.10),transparent 55%),radial-gradient(700px 500px at 50% 100%,rgba(255,13,74,.06),transparent 60%)}
 .tdr-lb-particles{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
@@ -150,10 +150,10 @@ body .w-embed,body [class*="embed"]{margin:0!important;padding:0!important;backg
 .tdr-lb .foot .red{color:var(--red);font-weight:800}
 
 /* MODAL */
-.tdr-lb-modal{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .4s var(--e);font-family:'Montserrat',sans-serif}
+.tdr-lb-modal{position:absolute;top:0;left:0;width:100%;min-height:100%;z-index:10000;background:rgba(0,0,0,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:none;align-items:flex-start;justify-content:center;padding:40px 20px 60px;opacity:0;transition:opacity .4s var(--e);font-family:'Montserrat',sans-serif}
 .tdr-lb-modal.active{display:flex;opacity:1}
 .tdr-lb-modal *{box-sizing:border-box}
-.tdr-lb-modal-box{position:relative;width:100%;max-width:540px;background:rgba(20,20,22,.96);border:1px solid rgba(255,13,74,.15);border-radius:24px;padding:40px 32px;margin:0 auto;transform:scale(.92) translateY(20px);transition:transform .5s var(--eb);color:#fafafa;text-align:center;max-height:90vh;overflow-y:auto;overflow-x:hidden}
+.tdr-lb-modal-box{position:relative;width:100%;max-width:540px;background:rgba(20,20,22,.96);border:1px solid rgba(255,13,74,.15);border-radius:24px;padding:40px 32px;margin:0 auto;transform:scale(.92) translateY(20px);transition:transform .5s var(--eb);color:#fafafa;text-align:center;overflow-y:visible}
 .tdr-lb-modal.active .tdr-lb-modal-box{transform:scale(1) translateY(0)}
 .tdr-lb-modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#a8a8a8;font-size:22px;transition:all .3s;z-index:2}
 .tdr-lb-modal-close:hover{background:rgba(255,255,255,.1);color:#fff;transform:rotate(90deg)}
@@ -325,7 +325,6 @@ body .w-embed,body [class*="embed"]{margin:0!important;padding:0!important;backg
 <div class="foot">Powered by <span class="red">Thundrr</span> · TAP Campaign 2026</div>
 
 </div>
-</div>
 
 <!-- SIGNUP MODAL -->
 <div class="tdr-lb-modal" id="tdrLbModalSignup" role="dialog" aria-modal="true">
@@ -385,6 +384,8 @@ body .w-embed,body [class*="embed"]{margin:0!important;padding:0!important;backg
     <div class="tdr-lb-brand-list" id="tdrLbBrandList"></div>
   </div>
 </div>
+
+</div><!-- /tdr-lb-bg -->
 
 <script>
 (()=>{
@@ -457,8 +458,8 @@ expandBtn.addEventListener('click',()=>{
 
 /* MODALS */
 const modals={signup:document.getElementById('tdrLbModalSignup'),brands:document.getElementById('tdrLbModalBrands')};
-window.tdrLbOpen=function(k){modals[k].classList.add('active');document.body.style.overflow='hidden'};
-window.tdrLbClose=function(k){modals[k].classList.remove('active');document.body.style.overflow=''};
+window.tdrLbOpen=function(k){modals[k].classList.add("active");document.documentElement.scrollTop=0;document.body.scrollTop=0;document.body.style.overflow="hidden"};
+window.tdrLbClose=function(k){modals[k].classList.remove("active");document.body.style.overflow="";setTimeout(tdrSendHeight,100)};
 Object.entries(modals).forEach(([k,m])=>{m.addEventListener('click',e=>{if(e.target===m)tdrLbClose(k)})});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){Object.keys(modals).forEach(k=>{if(modals[k].classList.contains('active'))tdrLbClose(k)})}});
 
