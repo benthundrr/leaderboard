@@ -4,243 +4,299 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thundrr TAP Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+:root{
+  --pink:#fc0341;--pink-bright:#fc0341;--pink-glow:rgba(252,3,65,0.22);
+  --pink-subtle:rgba(252,3,65,0.08);--bg:#060608;--surface:#0f0f12;
+  --surface2:#161619;--surface3:#1c1c21;--border:rgba(255,255,255,0.06);
+  --border-pink:rgba(252,3,65,0.25);--text:#f5f5f8;--muted:rgba(245,245,248,0.45);
+  --faint:rgba(245,245,248,0.12);--green:#00e87a;--green-subtle:rgba(0,232,122,0.08);
+  --gold:#ffcc00;--gold-subtle:rgba(255,204,0,0.08);--r:14px;
+  --red:#ff0d4a;--pill:100px;--e:cubic-bezier(.16,1,.3,1);--eb:cubic-bezier(.34,1.56,.64,1)
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#0c0c0c;color:#fafafa;font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-:root{--red:#ff0d4a;--surface:#141414;--surface2:#1a1a1a;--mute:#a8a8a8;--mute2:#6a6a6a;--line:rgba(255,255,255,.07);--gold:#ffd27a;--green:#22c55e;--r:18px;--pill:100px;--e:cubic-bezier(.16,1,.3,1);--eb:cubic-bezier(.34,1.56,.64,1)}
-
-/* BG */
-.bg{position:relative;background:#0c0c0c;min-height:100vh;overflow:hidden;isolation:isolate;padding:60px 0 80px}
-.bg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(1200px 800px at 50% 30%,#000 30%,transparent 80%);pointer-events:none;z-index:0}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(900px 600px at 50% 0%,rgba(255,13,74,.10),transparent 55%),radial-gradient(700px 500px at 50% 100%,rgba(255,13,74,.06),transparent 60%);pointer-events:none;z-index:0}
-.particles{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.particles span{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,13,74,.5);opacity:0;animation:rise linear infinite}
-@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh);opacity:0}}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;z-index:9999}
+.blobs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(100px);animation:drift 12s ease-in-out infinite}
+.blob-1{width:600px;height:600px;background:radial-gradient(circle,rgba(252,3,65,0.18),transparent 70%);top:-200px;right:-100px}
+.blob-2{width:400px;height:400px;background:radial-gradient(circle,rgba(252,3,65,0.1),transparent 70%);bottom:-100px;left:-100px;animation-delay:-5s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-30px) scale(1.06)}}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
-@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(0.97)}to{opacity:1;transform:none}}
 
-/* WRAP */
-.wrap{max-width:640px;margin:0 auto;padding:0 20px;position:relative;z-index:1;text-align:center}
+.page{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 18px 80px}
 
-/* HEADER */
-.tag-pill{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--red);padding:8px 16px;background:rgba(255,13,74,.08);border:1px solid rgba(255,13,74,.22);border-radius:var(--pill);margin-bottom:24px;animation:up .5s ease both}
-.tag-pill::before{content:"";width:6px;height:6px;background:var(--red);border-radius:50%;box-shadow:0 0 10px var(--red);animation:pulse 1.6s ease infinite}
-h1{font-size:clamp(44px,10vw,68px);font-weight:900;line-height:.95;text-transform:uppercase;letter-spacing:-.03em;margin-bottom:16px;animation:up .5s .05s ease both}
-h1 .red{color:var(--red)}
-.sub{font-size:15px;font-weight:500;color:var(--mute);max-width:420px;margin:0 auto 24px;line-height:1.6;animation:up .5s .1s ease both}
-.sub strong{color:#fafafa;font-weight:700}
+/* ── HEADER ── */
+.header{padding:72px 0 0;text-align:center;animation:up .6s ease both}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--pink-subtle);border:1px solid var(--border-pink);border-radius:var(--pill);padding:6px 16px;font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--pink);margin-bottom:20px}
+.eyebrow-dot{width:5px;height:5px;background:var(--pink);border-radius:50%;animation:pulse 2s ease infinite}
+h1{font-size:clamp(38px,8vw,66px);font-weight:900;letter-spacing:-.04em;line-height:.95;margin-bottom:14px}
+h1 em{font-style:normal;color:var(--pink)}
+.header-sub{font-size:14px;font-weight:500;color:var(--muted);max-width:380px;margin:0 auto 24px;line-height:1.65}
+.header-sub strong{color:var(--text)}
 
-/* MINI TIMER */
-.timer-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px;animation:up .5s .12s ease both}
-.timer-label{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mute2)}
-.timer-val{font-size:13px;font-weight:800;color:var(--red);padding:7px 14px;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:var(--pill);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+/* ── TIMER ── */
+.timer-wrap{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:32px;animation:up .5s .1s ease both}
+.timer-label{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,245,248,.3)}
+.timer-val{font-size:13px;font-weight:800;color:var(--pink);padding:7px 14px;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:var(--pill);letter-spacing:.04em;font-variant-numeric:tabular-nums}
 
-/* HERO BUTTON */
-.hero-btn{width:100%;padding:28px;background:linear-gradient(135deg,rgba(255,13,74,.13),rgba(255,13,74,.04));border:1.5px solid rgba(255,13,74,.35);border-radius:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .3s var(--e),border-color .2s,box-shadow .2s;margin-bottom:32px;position:relative;overflow:hidden;animation:up .5s .15s ease both}
-.hero-btn::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 20%,rgba(255,13,74,.1) 50%,transparent 80%);transform:translateX(-100%);transition:transform .6s var(--e)}
-.hero-btn:hover{transform:translateY(-3px);border-color:rgba(255,13,74,.65);box-shadow:0 16px 48px rgba(255,13,74,.2)}
-.hero-btn:hover::before{transform:translateX(100%)}
-.hero-eyebrow{font-size:9px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:8px}
-.hero-eyebrow::before{content:"";width:5px;height:5px;background:var(--red);border-radius:50%;animation:pulse 1.5s ease infinite}
-.hero-title{font-size:clamp(22px,5vw,30px);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
-.hero-title .red{color:var(--red)}
-.hero-desc{font-size:12px;font-weight:600;color:var(--mute)}
-.hero-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-.hero-pill{padding:4px 10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--pill);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
-.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--red);color:#fff;border-radius:var(--pill);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;transition:background .2s;box-shadow:0 6px 20px rgba(255,13,74,.35);margin-top:4px}
-.hero-btn:hover .hero-cta{background:#fff;color:#0c0c0c}
+/* ── SEARCH ── */
+.search-wrap{margin-bottom:16px;animation:up .6s .12s ease both}
+.search-box{position:relative;display:flex;align-items:center}
+.s-icon{position:absolute;left:17px;color:var(--muted);pointer-events:none;transition:color .2s}
+.search-box:focus-within .s-icon{color:var(--pink)}
+#brandSearch{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 48px 15px 48px;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:600;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+#brandSearch:focus{border-color:var(--pink);box-shadow:0 0 0 4px var(--pink-glow)}
+#brandSearch::placeholder{color:var(--faint);font-weight:500}
+#brandClear{position:absolute;right:14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;width:30px;height:30px;display:none;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:14px;transition:all .15s;font-family:'Montserrat',sans-serif}
+#brandClear:hover{background:var(--pink-subtle);color:var(--pink);border-color:var(--border-pink)}
+#brandClear.vis{display:flex}
+.brand-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;animation:up .6s .14s ease both}
+.brand-count{font-size:12px;font-weight:600;color:var(--muted)}
+.brand-count em{color:var(--text);font-style:normal}
+.brand-section-label{font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);display:flex;align-items:center;gap:6px}
+.brand-section-label::before{content:"";width:4px;height:4px;background:var(--pink);border-radius:50%;animation:pulse 1.5s ease infinite}
 
-/* SECTION */
-.sec{margin:0 0 20px;animation:up .5s .2s ease both}
-.sec-meta{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}
-.sec-num{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
-.sec-cat{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
-.sec-h{font-size:32px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;margin-bottom:6px}
-.sec-h .red{color:var(--red)}
-.sec-deck{font-size:13px;font-weight:500;color:var(--mute);line-height:1.55}
+/* ── BRAND CARDS ── */
+.brand-preview-wrap{position:relative;animation:up .6s .16s ease both}
+#brandPreviewGrid,#brandCatalogue{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px}
+#brandCatalogue{display:none}
 
-/* LEADERBOARD */
-.lb{margin-bottom:24px;animation:up .5s .25s ease both}
+.preview-fade{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to bottom,transparent 0%,var(--bg) 70%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;pointer-events:none}
+.preview-fade.gone{display:none}
+#showAllBtn{pointer-events:all;display:inline-flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border-pink);border-radius:var(--pill);padding:13px 26px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;color:var(--text);cursor:pointer;transition:all .22s var(--eb);box-shadow:0 4px 24px rgba(252,3,65,.2),0 2px 8px rgba(0,0,0,.4);letter-spacing:.01em}
+#showAllBtn:hover{background:var(--pink);border-color:var(--pink);transform:translateY(-2px) scale(1.04);box-shadow:0 8px 32px rgba(252,3,65,.4)}
+#showAllBtn em{color:var(--pink);font-style:normal}
+#showAllBtn:hover em{color:#fff}
+.show-arr{font-size:16px;transition:transform .3s var(--eb)}
+#showAllBtn:hover .show-arr{transform:translateY(3px)}
+
+/* sticky collapse button */
+#collapseBtn{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9998;align-items:center;gap:8px;padding:11px 22px;background:var(--surface2);border:1.5px solid var(--border-pink);border-radius:var(--pill);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:var(--text);cursor:pointer;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 4px 28px rgba(0,0,0,.8),0 0 0 1px rgba(252,3,65,.2);transition:all .2s var(--e);white-space:nowrap}
+#collapseBtn:hover{background:var(--surface3);border-color:rgba(252,3,65,.5);transform:translateX(-50%) translateY(-2px)}
+#collapseBtn.vis{display:flex}
+
+/* empty state */
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;font-weight:500}
+
+/* THE CARDS — exact style from Thundrr Shop */
+.brand-card{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;display:block;transition:transform .22s var(--eb),border-color .2s,box-shadow .2s;animation:cardIn .35s ease both;cursor:pointer}
+.brand-card:hover{transform:translateY(-4px) scale(1.015);border-color:var(--border-pink);box-shadow:0 14px 40px rgba(252,3,65,.14),0 4px 12px rgba(0,0,0,.5)}
+.brand-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(252,3,65,.05) 0%,transparent 55%);opacity:0;transition:opacity .22s;pointer-events:none}
+.brand-card:hover::after{opacity:1}
+.card-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+.card-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.card-av{width:40px;height:40px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;letter-spacing:-.03em;color:var(--pink);flex-shrink:0}
+.card-samples-tag{display:inline-flex;align-items:center;gap:4px;background:var(--gold-subtle);border:1px solid rgba(255,204,0,.2);border-radius:var(--pill);padding:3px 8px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.card-name{font-size:15px;font-weight:800;letter-spacing:-.025em;line-height:1.15;color:#fff}
+.card-boost{display:inline-flex;align-items:center;gap:5px;background:var(--green-subtle);border:1px solid rgba(0,232,122,.18);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;color:var(--green)}
+.card-cta{display:flex;align-items:center;justify-content:center;background:var(--pink);border:none;border-radius:10px;padding:11px 13px;font-size:12px;font-weight:800;color:#fff;transition:all .18s;gap:6px;letter-spacing:.02em;box-shadow:0 4px 16px rgba(252,3,65,.35)}
+.brand-card:hover .card-cta{background:var(--pink-bright);box-shadow:0 6px 22px rgba(252,3,65,.5);transform:translateY(-1px)}
+.cta-arr{font-size:13px;flex-shrink:0;transition:transform .18s}
+.brand-card:hover .cta-arr{transform:translate(2px,-2px)}
+.card-flash{position:absolute;inset:0;background:var(--pink);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;letter-spacing:.04em;gap:8px;opacity:0;pointer-events:none;border-radius:var(--r);transition:opacity .15s}
+.card-flash.show{opacity:1}
+
+/* ── DIVIDER ── */
+.divider{margin:32px 0;border:none;border-top:1px solid var(--border)}
+
+/* ── LEADERBOARD ── */
+.lb-header{text-align:center;margin-bottom:16px;animation:up .5s .2s ease both}
+.lb-eyebrow{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px}
+.lb-num{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--pink)}
+.lb-cat{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lb-title{font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;margin-bottom:6px}
+.lb-title em{font-style:normal;color:var(--pink)}
+.lb-deck{font-size:13px;font-weight:500;color:var(--muted);line-height:1.55}
 .lb-bar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .lb-week{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
-.lb-live{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,13,74,.08);border:1px solid rgba(255,13,74,.22);border-radius:var(--pill);font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
-.lb-live::before{content:"";width:5px;height:5px;background:var(--red);border-radius:50%;animation:pulse 1.5s ease infinite}
-.lb-list,.lb-rest{display:flex;flex-direction:column;gap:8px;text-align:left}
-.lb-rest{max-height:0;overflow:hidden;transition:max-height .6s var(--e),margin-top .6s var(--e)}
+.lb-live{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--pink-subtle);border:1px solid var(--border-pink);border-radius:var(--pill);font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
+.lb-live::before{content:"";width:5px;height:5px;background:var(--pink);border-radius:50%;animation:pulse 1.5s ease infinite}
+.lb-list,.lb-rest{display:flex;flex-direction:column;gap:8px;text-align:left;animation:up .5s .22s ease both}
+.lb-rest{max-height:0;overflow:hidden;transition:max-height .6s var(--e),margin-top .5s}
 .lb-rest.open{max-height:1200px;margin-top:8px}
-.lb-row{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);transition:transform .3s var(--e),border-color .2s}
-.lb-row:hover{transform:translateY(-2px);border-color:rgba(255,13,74,.22)}
-.lb-row.r1{border-color:rgba(255,210,122,.18)}
-.lb-row.r2{border-color:rgba(216,216,224,.12)}
-.lb-row.r3{border-color:rgba(230,155,107,.16)}
+.lb-row{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);transition:transform .3s var(--e),border-color .2s}
+.lb-row:hover{transform:translateY(-2px);border-color:var(--border-pink)}
+.lb-row.r1{border-color:rgba(255,204,0,.2)}.lb-row.r2{border-color:rgba(216,216,224,.12)}.lb-row.r3{border-color:rgba(230,155,107,.16)}
 .lb-row.pending{opacity:.5}
-.lb-rank{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:var(--mute)}
+.lb-rank{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:var(--muted)}
 .r1 .lb-rank{background:linear-gradient(135deg,#ffd27a,#e8a44a);border-color:#ffd27a;color:#1a0c00;box-shadow:0 4px 14px rgba(255,210,122,.22)}
 .r2 .lb-rank{background:linear-gradient(135deg,#d8d8e0,#a8a8b0);border-color:#d8d8e0;color:#0a0a14}
 .r3 .lb-rank{background:linear-gradient(135deg,#e69b6b,#b06840);border-color:#e69b6b;color:#1a0a00}
 .lb-info{min-width:0}
-.lb-handle{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:-.005em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.1}
-.lb-handle .at{color:var(--red);margin-right:1px}
-.lb-handle.empty{color:var(--mute2)}
-.lb-tag{font-size:9px;font-weight:700;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
-.lb-tag .dot{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--red);margin:0 7px 1px;vertical-align:middle}
+.lb-handle{font-size:15px;font-weight:800;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.1}
+.lb-handle .at{color:var(--pink);margin-right:1px}
+.lb-handle.empty{color:rgba(245,245,248,.2)}
+.lb-tag{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
+.lb-tag .dot{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--pink);margin:0 7px 1px;vertical-align:middle}
 .lb-gmv-wrap{text-align:right}
 .lb-gmv{font-size:20px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
-.r1 .lb-gmv{color:var(--gold)}
-.r2 .lb-gmv{color:#d8d8e0}
-.r3 .lb-gmv{color:#e69b6b}
-.lb-gmv .cur{font-size:12px;color:var(--mute);margin-right:1px;font-weight:700}
-.lb-gmv-sub{font-size:8px;font-weight:700;color:var(--mute2);letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
-.pending .lb-gmv{font-size:15px;color:var(--mute2)}
-.lb-expand{margin-top:12px;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--pill);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .3s var(--e),color .2s}
-.lb-expand:hover{background:#fafafa;color:#0c0c0c;transform:translateY(-2px)}
+.r1 .lb-gmv{color:var(--gold)}.r2 .lb-gmv{color:#d8d8e0}.r3 .lb-gmv{color:#e69b6b}
+.lb-gmv .cur{font-size:12px;color:var(--muted);margin-right:1px;font-weight:700}
+.lb-gmv-sub{font-size:8px;font-weight:700;color:rgba(245,245,248,.25);letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+.pending .lb-gmv{font-size:15px;color:rgba(245,245,248,.2)}
+.lb-expand{margin-top:12px;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--pill);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .3s var(--e),color .2s}
+.lb-expand:hover{background:var(--text);color:var(--bg);transform:translateY(-2px)}
 .lb-expand .chev{transition:transform .3s var(--eb)}
 .lb-expand.open .chev{transform:rotate(180deg)}
-.lb-foot{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;font-weight:600;color:var(--mute);line-height:1.55}
-.lb-foot strong{color:#fafafa;font-weight:800}
+.lb-foot{margin-top:18px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);line-height:1.55;text-align:center}
+.lb-foot strong{color:var(--text);font-weight:800}
 
-/* ACTIONS */
-.actions{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;animation:up .5s .3s ease both}
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:var(--pill);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .3s var(--e),background .2s,color .2s,border-color .2s,box-shadow .2s;border:1px solid transparent;width:100%}
-.btn:hover{transform:translateY(-2px)}
-.btn-primary{background:var(--red);color:#fff;border-color:var(--red);box-shadow:0 8px 24px rgba(255,13,74,.28)}
-.btn-primary:hover{background:#fff;color:#0c0c0c;border-color:#fff}
-.btn-ghost{background:rgba(255,255,255,.04);color:#fafafa;border-color:var(--line)}
-.btn-ghost:hover{background:#fafafa;color:#0c0c0c;border-color:#fafafa}
-.foot{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mute2);animation:up .5s .35s ease both}
-.foot .red{color:var(--red)}
+/* ── SIGNUP BTN ── */
+.btn-signup{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:var(--pill);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:#fc0341;color:#fff;border:1px solid #fc0341;box-shadow:0 8px 24px rgba(252,3,65,.3);width:100%;transition:transform .3s var(--e),background .2s,color .2s;margin-top:28px;animation:up .5s .3s ease both}
+.btn-signup:hover{background:#fff;color:#0c0c0c;transform:translateY(-2px)}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--pill);padding:11px 22px;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;display:flex;align-items:center;gap:8px;opacity:0;transition:all .3s var(--eb);z-index:10000;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.ok{border-color:rgba(0,232,122,.35);color:var(--green)}
+#toast.warn{border-color:rgba(255,204,0,.35);color:var(--gold)}
+
+.footer{text-align:center;padding:40px 0 0;font-size:11px;font-weight:600;color:var(--faint);letter-spacing:.05em}
 
 @media(max-width:560px){
-  .bg{padding:40px 0 60px}
-  .wrap{padding:0 16px}
-  h1{font-size:42px}
-  .hero-btn{padding:20px 16px}
+  .page{padding:0 14px 60px}
+  .header{padding:56px 0 0}
+  h1{font-size:38px}
+  #brandPreviewGrid,#brandCatalogue{grid-template-columns:1fr 1fr;gap:10px}
+  .card-body{padding:12px;gap:8px}
+  .card-av{width:34px;height:34px;font-size:11px}
+  .card-name{font-size:13px}
+  .card-boost{font-size:10px;padding:5px 8px}
+  .card-cta{font-size:11px;padding:9px 10px}
+  .card-samples-tag{font-size:8px}
   .lb-row{grid-template-columns:38px 1fr auto;gap:10px;padding:12px 13px}
   .lb-rank{width:34px;height:34px;font-size:14px}
-  .lb-handle{font-size:13px}
-  .lb-gmv{font-size:17px}
+  .lb-handle{font-size:13px}.lb-gmv{font-size:17px}
 }
 </style>
 </head>
 <body>
-<div class="bg">
-<div class="particles" id="particles"></div>
-<div class="wrap">
+<div class="blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+<div class="page">
 
-  <div class="tag-pill">Thundrr × TAP Campaign</div>
-  <h1>Thundrr<br><span class="red">Leaderboard</span></h1>
-  <p class="sub">Top creators driving GMV through Thundrr-linked TAP products. <strong>Updated every Friday.</strong></p>
+<!-- HEADER -->
+<header class="header">
+  <div class="eyebrow"><span class="eyebrow-dot"></span>Thundrr × TAP Campaign</div>
+  <h1>Thundrr<br><em>Leaderboard</em></h1>
+  <p class="header-sub">Top creators driving GMV through Thundrr-linked TAP products. <strong>Updated every Friday.</strong></p>
+</header>
 
-  <div class="timer-row">
-    <span class="timer-label">Kicks off</span>
-    <span class="timer-val" id="timerVal">--</span>
-    <span class="timer-label">· May 14 · 12 AM PST</span>
+<!-- TIMER -->
+<div class="timer-wrap">
+  <span class="timer-label">Kicks off</span>
+  <span class="timer-val" id="timerVal">--</span>
+  <span class="timer-label">· May 14 · 12 AM PST</span>
+</div>
+
+<!-- BRAND SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <svg class="s-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="brandSearch" type="text" placeholder="Search 200+ campaign brands…" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button id="brandClear" aria-label="Clear">✕</button>
   </div>
+</div>
+<div class="brand-bar">
+  <div class="brand-section-label">Spring / Summer 2026 · Campaign Products</div>
+  <span class="brand-count"><em id="brandCountEl">0</em> brands</span>
+</div>
 
-  <button class="hero-btn" onclick="openBrands()">
-    <div class="hero-eyebrow">Spring / Summer 2026 · TAP Campaign</div>
-    <div class="hero-title">View <span class="red">Campaign</span> Products</div>
-    <div class="hero-desc">200+ boosted-commission brands · All have free samples</div>
-    <div class="hero-pills">
-      <span class="hero-pill">🌸 Beauty</span>
-      <span class="hero-pill">💊 Wellness</span>
-      <span class="hero-pill">👗 Fashion</span>
-      <span class="hero-pill">🏠 Home</span>
-      <span class="hero-pill">🐾 Pets</span>
-      <span class="hero-pill">💪 Fitness</span>
-    </div>
-    <div class="hero-cta">Browse All Brands →</div>
-  </button>
-
-  <div class="sec">
-    <div class="sec-meta"><span class="sec-num">[01]</span><span class="sec-cat">Live Standings</span></div>
-    <h2 class="sec-h">The <span class="red">Top 10</span></h2>
-    <p class="sec-deck">Ranked by TAP campaign GMV through Thundrr-linked products.</p>
-  </div>
-
-  <div class="lb">
-    <div class="lb-bar">
-      <span class="lb-week">Week 01 // Pre-launch</span>
-      <span class="lb-live">Fridays</span>
-    </div>
-    <div class="lb-list" id="lbTop"></div>
-    <div class="lb-rest" id="lbRest"></div>
-    <button class="lb-expand" id="lbExpandBtn">
-      <span id="lbExpandTxt">Show ranks 4–10</span>
-      <span class="chev">▾</span>
+<!-- BRAND CARDS -->
+<div class="brand-preview-wrap" id="brandPreviewWrap">
+  <div id="brandPreviewGrid"></div>
+  <div class="preview-fade" id="previewFade">
+    <button id="showAllBtn">
+      <span>View All <em id="brandTotalEl"></em> Brands 🔥</span>
+      <span class="show-arr">↓</span>
     </button>
-    <div class="lb-foot">Only creators using <strong>Thundrr-linked TAP products</strong> qualify.<br>Standings refresh every Friday at 12:00 PM PST.</div>
   </div>
-
-  <div class="actions">
-    <button class="btn btn-primary" onclick="openSignup()">Sign Up to Compete →</button>
-    <button class="btn btn-ghost" onclick="openBrands()">Campaign Products →</button>
-  </div>
-
-  <div class="foot">Powered by <span class="red">Thundrr</span> · TAP Campaign 2026</div>
-
 </div>
+<div id="brandCatalogue"></div>
+<button id="collapseBtn" onclick="collapseBrands()">↑ Collapse Brands</button>
+<div id="brandEmpty" class="empty-state" style="display:none">😶 No brands match your search</div>
+
+<hr class="divider">
+
+<!-- LEADERBOARD -->
+<div class="lb-header">
+  <div class="lb-eyebrow"><span class="lb-num">[01]</span><span class="lb-cat">Live Standings</span></div>
+  <h2 class="lb-title">The <em>Top 10</em></h2>
+  <p class="lb-deck">Ranked by TAP campaign GMV through Thundrr-linked products.</p>
 </div>
+<div class="lb-bar">
+  <span class="lb-week">Week 01 // Pre-launch</span>
+  <span class="lb-live">Fridays</span>
+</div>
+<div class="lb-list" id="lbTop"></div>
+<div class="lb-rest" id="lbRest"></div>
+<button class="lb-expand" id="lbExpandBtn" style="display:block;margin:12px auto 0">
+  <span id="lbExpandTxt">Show ranks 4–10</span>
+  <span class="chev">▾</span>
+</button>
+<div class="lb-foot">Only creators using <strong>Thundrr-linked TAP products</strong> qualify.<br>Standings refresh every Friday at 12:00 PM PST.</div>
+
+<button class="btn-signup" onclick="window.parent.postMessage({type:'tdrModal',modal:'signup'},'*')">🏆 Sign Up to Compete →</button>
+
+<div class="footer">THUNDRR SHOP · TAP CAMPAIGN 2026 · ALL BRANDS HAVE FREE SAMPLES</div>
+</div>
+<div id="toast"></div>
 
 <script>
-// Particles
-const pc=document.getElementById('particles');
-for(let i=0;i<20;i++){const s=document.createElement('span');s.style.cssText='left:'+Math.random()*100+'%;bottom:-10px;';const d=12+Math.random()*16;s.style.animationDuration=d+'s';s.style.animationDelay=(-Math.random()*d)+'s';pc.appendChild(s);}
-
-// Countdown
+// ── Countdown ──
 const TARGET=new Date('2026-05-14T00:00:00-08:00').getTime();
 function pad(n){return n<10?'0'+n:''+n}
 function tick(){
-  const diff=TARGET-Date.now();
-  const el=document.getElementById('timerVal');
-  if(diff<=0){el.textContent='LIVE';el.style.color='#22c55e';return;}
-  const d=Math.floor(diff/86400000);
-  const h=Math.floor((diff%86400000)/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const s=Math.floor((diff%60000)/1000);
+  const diff=TARGET-Date.now(),el=document.getElementById('timerVal');
+  if(diff<=0){el.textContent='LIVE 🔴';el.style.color='#00e87a';return;}
+  const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
   el.textContent=d+'d '+pad(h)+'h '+pad(m)+'m '+pad(s)+'s';
 }
 tick();setInterval(tick,1000);
 
-// Leaderboard data — edit each Friday
-const LEADERBOARD=[
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null},
-  {handle:null,gmv:null,tag:null}
-];
+// ── Leaderboard ──
+const LB=[{},{},{},{},{},{},{},{},{},{}];
 function buildRow(c,i){
-  const rank=i+1,rc=rank<=3?' r'+rank:'',pend=(!c.handle||c.gmv==null)?' pending':'';
-  const hHtml=pend?'<span class="lb-handle empty">// Pending Spot</span>':'<span class="lb-handle"><span class="at">@</span>'+c.handle+'</span>';
-  const tHtml='<div class="lb-tag">Rank #'+rank+'<span class="dot"></span>'+(pend?'Awaiting first sale':(c.tag||'TAP creator'))+'</div>';
-  const gHtml=pend?'<div class="lb-gmv">—</div><div class="lb-gmv-sub">No GMV</div>':'<div class="lb-gmv"><span class="cur">$</span>'+c.gmv.toLocaleString('en-US',{maximumFractionDigits:0})+'</div><div class="lb-gmv-sub">TAP GMV</div>';
-  return '<div class="lb-row'+rc+pend+'"><div class="lb-rank">'+rank+'</div><div class="lb-info">'+hHtml+tHtml+'</div><div class="lb-gmv-wrap">'+gHtml+'</div></div>';
+  const rank=i+1,rc=rank<=3?' r'+rank:'',p=!c.handle?' pending':'';
+  return'<div class="lb-row'+rc+p+'"><div class="lb-rank">'+rank+'</div><div class="lb-info">'+(p?'<span class="lb-handle empty">// Pending Spot</span>':'<span class="lb-handle"><span class="at">@</span>'+c.handle+'</span>')+'<div class="lb-tag">Rank #'+rank+'<span class="dot"></span>'+(p?'Awaiting first sale':(c.tag||'TAP creator'))+'</div></div><div class="lb-gmv-wrap">'+(p?'<div class="lb-gmv">—</div><div class="lb-gmv-sub">No GMV yet</div>':'<div class="lb-gmv"><span class="cur">$</span>'+c.gmv.toLocaleString()+'</div><div class="lb-gmv-sub">TAP GMV</div>')+'</div></div>';
 }
-const real=LEADERBOARD.filter(c=>c.handle&&c.gmv!=null).sort((a,b)=>b.gmv-a.gmv);
-const pend=LEADERBOARD.filter(c=>!c.handle||c.gmv==null);
-const ord=[...real,...pend].slice(0,10);
-while(ord.length<10)ord.push({handle:null,gmv:null,tag:null});
-document.getElementById('lbTop').innerHTML=ord.slice(0,3).map(buildRow).join('');
-document.getElementById('lbRest').innerHTML=ord.slice(3).map((c,i)=>buildRow(c,i+3)).join('');
-
-const expandBtn=document.getElementById('lbExpandBtn');
-expandBtn.addEventListener('click',()=>{
-  const r=document.getElementById('lbRest');
-  const open=r.classList.toggle('open');
-  expandBtn.classList.toggle('open',open);
-  document.getElementById('lbExpandTxt').textContent=open?'Hide ranks 4–10':'Show ranks 4–10';
+document.getElementById('lbTop').innerHTML=LB.slice(0,3).map(buildRow).join('');
+document.getElementById('lbRest').innerHTML=LB.slice(3).map((c,i)=>buildRow(c,i+3)).join('');
+const expBtn=document.getElementById('lbExpandBtn');
+expBtn.addEventListener('click',()=>{
+  const r=document.getElementById('lbRest'),o=r.classList.toggle('open');
+  expBtn.classList.toggle('open',o);
+  document.getElementById('lbExpandTxt').textContent=o?'Hide ranks 4–10':'Show ranks 4–10';
   setTimeout(sendHeight,700);
 });
 
-// Brands data
+// ── Brands ──
 const BRANDS=[
+  {name:"COSRX",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBR6X9Ol6O"},
+  {name:"Olay",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf0hXC70I1"},
+  {name:"Nécessaire",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKSBwcDXv05"},
+  {name:"Too Faced",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDsz6ye9TBs"},
+  {name:"Physician's Choice",url:"https://affiliate-us.tiktok.com/api/v1/share/AJHA5BPFbWIg"},
+  {name:"Optimum Nutrition",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKRWLYv1TrG"},
+  {name:"Vital Proteins",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKRWP0XoyIl"},
+  {name:"Halara",url:"https://affiliate-us.tiktok.com/api/v1/share/AJEJG8va3IR0"},
+  {name:"Forever 21",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf3iGvKjDW"},
+  {name:"Murad",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf3A0xIcKp"},
+  {name:"Pixi Beauty",url:"https://affiliate-us.tiktok.com/api/v1/share/AJEd9hs1ag82"},
+  {name:"e.l.f.",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKYLBc0JoPx"},
+  {name:"Pantene",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyW643dPlh"},
+  {name:"Native",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyXXV6VCaY"},
+  {name:"Arrae",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBRRkbFLq6"},
+  {name:"Baby Brezza",url:"https://affiliate-us.tiktok.com/api/v1/share/AJOqOs2tezsL"},
+  {name:"Popilush",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJ2bImxuKAP"},
+  {name:"Laura Mercier",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKYXJf53JJa"},
+  {name:"Peter Thomas Roth",url:"https://affiliate-us.tiktok.com/api/v1/share/AJCikzsAl4RT"},
+  {name:"Karseell",url:"https://affiliate-us.tiktok.com/api/v1/share/AImwGx5omhxK"},
   {name:"MissMe",url:"https://affiliate-us.tiktok.com/api/v1/share/AJLDPDqbDPmu"},
   {name:"Fufu & Gaga",url:"https://affiliate-us.tiktok.com/api/v1/share/AJLah0F16uM8"},
   {name:"Jayshop",url:"https://affiliate-us.tiktok.com/api/v1/share/AJLalsosldHv"},
@@ -300,7 +356,6 @@ const BRANDS=[
   {name:"Edikted",url:"https://affiliate-us.tiktok.com/api/v1/share/AJC3hWEs0zyq"},
   {name:"francisandjean",url:"https://affiliate-us.tiktok.com/api/v1/share/AJC3hWEs0zyq"},
   {name:"Sacheu",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBQH0bqJK7"},
-  {name:"COSRX",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBR6X9Ol6O"},
   {name:"Toplux",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBRMe5x64j"},
   {name:"Hotwaveus",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJvE9jvfNVB"},
   {name:"Gardenika",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJvEKLE3etm"},
@@ -327,7 +382,6 @@ const BRANDS=[
   {name:"Eomenie",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJvZMwnuu1p"},
   {name:"UFORU",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJvZUV7a0nE"},
   {name:"Dlooda",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJvZiV6SMRo"},
-  {name:"Nécessaire",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKSBwcDXv05"},
   {name:"MyDepot Outlet",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKSCBhJjSpJ"},
   {name:"Pinsmark",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKNXnAZqnyb"},
   {name:"Bambüsi",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKSM6wYuji7"},
@@ -337,18 +391,13 @@ const BRANDS=[
   {name:"Roomba",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKSSX6MNa9i"},
   {name:"Mary's Ruth",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKSmzIBdW1A"},
   {name:"Chadly Bedding",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKYPo5tuyzS"},
-  {name:"Laura Mercier",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKYXJf53JJa"},
   {name:"EKOUAER SHOP",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKYXg9RwCnA"},
   {name:"Zenwise",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKYXqrNyXCD"},
-  {name:"Forever 21",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf3iGvKjDW"},
   {name:"New Chapter",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf3Vzk2Ia4"},
-  {name:"My Depot Outlet",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf3DM6crRo"},
-  {name:"Murad",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf3A0xIcKp"},
   {name:"Duke Cannon",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf2JqQE9en"},
   {name:"Sourcebooks",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf28K3unh0"},
   {name:"Seven Minerals",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf1yyNzYf9"},
   {name:"Aura Glow",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf17YU85K8"},
-  {name:"Olay",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf0hXC70I1"},
   {name:"WonderCow",url:"https://affiliate-us.tiktok.com/api/v1/share/AJLDO0eSGFs5"},
   {name:"Quiksilver",url:"https://affiliate-us.tiktok.com/api/v1/share/AJLDL8nHQgdY"},
   {name:"Fragrance One",url:"https://affiliate-us.tiktok.com/api/v1/share/AJLDKdl5hKLz"},
@@ -380,12 +429,11 @@ const BRANDS=[
   {name:"Relaxium",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyVDc9Dm3q"},
   {name:"Sevenminerals",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyWejz8nke"},
   {name:"UnbeatableSale",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyVraFV009"},
-  {name:"Pantene",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyW643dPlh"},
+  {name:"Oudlash",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyVy3QTsoi"},
   {name:"Mott & Bow",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyXk8X78eD"},
   {name:"New Chapter Inc",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyWFpAa2Ho"},
   {name:"Sourcebooks Reads",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyX8QmeQHM"},
   {name:"Quiksilver US",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyXJM8VkKG"},
-  {name:"Native",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyXXV6VCaY"},
   {name:"Duke Cannon Supply Co",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyXbZ5crWn"},
   {name:"Balance of Nature Shop",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyZ3WeO30i"},
   {name:"Hoga Store",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNyYQYwppgY"},
@@ -407,45 +455,33 @@ const BRANDS=[
   {name:"Vital Proteins Shop",url:"https://affiliate-us.tiktok.com/api/v1/share/AJOqTBV17b57"},
   {name:"Weider Global Nutrition",url:"https://affiliate-us.tiktok.com/api/v1/share/AJOqS6RMrr6X"},
   {name:"youtheory",url:"https://affiliate-us.tiktok.com/api/v1/share/AJOqStIgmMkj"},
-  {name:"Karseell",url:"https://affiliate-us.tiktok.com/api/v1/share/AImwGx5omhxK"},
   {name:"OLOV",url:"https://affiliate-us.tiktok.com/api/v1/share/AIn0nnbKaKfk"},
-  {name:"Popilush",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJ2bImxuKAP"},
   {name:"ucoolme",url:"https://affiliate-us.tiktok.com/api/v1/share/AJIfnFZfe3un"},
   {name:"Delmira",url:"https://affiliate-us.tiktok.com/api/v1/share/AJHXKr6Bb6aw"},
-  {name:"Physician's Choice",url:"https://affiliate-us.tiktok.com/api/v1/share/AJHA5BPFbWIg"},
   {name:"Automet",url:"https://affiliate-us.tiktok.com/api/v1/share/AJGxB8lQW6y7"},
   {name:"Yagud",url:"https://affiliate-us.tiktok.com/api/v1/share/AJGx90AMpmJr"},
   {name:"Evellyhootd",url:"https://affiliate-us.tiktok.com/api/v1/share/AJFIWy1chmOm"},
   {name:"Faiable",url:"https://affiliate-us.tiktok.com/api/v1/share/AJEsuemGW6J2"},
-  {name:"Pixi Beauty",url:"https://affiliate-us.tiktok.com/api/v1/share/AJEd9hs1ag82"},
-  {name:"Halara",url:"https://affiliate-us.tiktok.com/api/v1/share/AJEJG8va3IR0"},
   {name:"Pourri",url:"https://affiliate-us.tiktok.com/api/v1/share/AJE7YoJiLILn"},
   {name:"Dossier",url:"https://affiliate-us.tiktok.com/api/v1/share/AJE7TD2KfYJv"},
   {name:"Sungboon Editor",url:"https://affiliate-us.tiktok.com/api/v1/share/AJE7Q4f2Cemz"},
   {name:"Nyzfexk",url:"https://affiliate-us.tiktok.com/api/v1/share/AJE4EVh0I1EH"},
   {name:"Dr.Flash",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDxNhpyWIlC"},
   {name:"WNP Skincare",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDt4Iou0rI0"},
-  {name:"Too Faced",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDsz6ye9TBs"},
   {name:"Yianna",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDsz6agh8f1"},
   {name:"OEAK",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDkA0wL0SqG"},
   {name:"Bagsmart",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDg7SlbY5iT"},
   {name:"TGideas",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDaiwxU0DnZ"},
   {name:"Dr.Leo",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDZdb33iFuL"},
   {name:"PetPivot",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDHqPwuchWj"},
-  {name:"Peter Thomas Roth",url:"https://affiliate-us.tiktok.com/api/v1/share/AJCikzsAl4RT"},
   {name:"Wiholl",url:"https://affiliate-us.tiktok.com/api/v1/share/AJCN9VAxlA92"},
   {name:"Feel Goods",url:"https://affiliate-us.tiktok.com/api/v1/share/AJC7vPqP1kju"},
   {name:"G4Free",url:"https://affiliate-us.tiktok.com/api/v1/share/AJBtIJpLwBz2"},
   {name:"SVM",url:"https://affiliate-us.tiktok.com/api/v1/share/AJBDyjzzeQSl"},
   {name:"Evaless",url:"https://affiliate-us.tiktok.com/api/v1/share/AJAuX1aq7zTY"},
-  {name:"Arrae",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBRRkbFLq6"},
   {name:"SKIN1004",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBQNNlfgpP"},
-  {name:"Optimum Nutrition",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKRWLYv1TrG"},
-  {name:"Vital Proteins",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKRWP0XoyIl"},
   {name:"MuscleTech",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKRWQMk5RBC"},
   {name:"IGK",url:"https://affiliate-us.tiktok.com/api/v1/share/AImGuR3pvkUE"},
-  {name:"e.l.f.",url:"https://affiliate-us.tiktok.com/api/v1/share/AJKYLBc0JoPx"},
-  {name:"Physician's Choice (Summer)",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe39cjBpxT"},
   {name:"Dr. Melaxin",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe44cNLsFl"},
   {name:"PrettyGarden",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe3vRSoCYn"},
   {name:"Scutsy",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe3wUSg4o9"},
@@ -461,11 +497,122 @@ const BRANDS=[
   {name:"Medicube Face and Body",url:"https://affiliate-us.tiktok.com/api/v1/share/AJH3ubFfVuhD"},
   {name:"Medicube Aging Backwards",url:"https://affiliate-us.tiktok.com/api/v1/share/AJH3tqavgWFY"},
 ];
-const SUGGESTED=["COSRX","Olay","Nécessaire","Too Faced","Physician's Choice","Optimum Nutrition","Vital Proteins","Halara","Forever 21","Murad","Pixi Beauty","e.l.f.","Pantene","Native","Arrae","Baby Brezza","Popilush","Laura Mercier","Peter Thomas Roth","Karseell"];
 
-// postMessage to parent for modal
-function openBrands(){window.parent.postMessage({type:'tdrModal',modal:'brands',brands:BRANDS,suggested:SUGGESTED},'*');}
-function openSignup(){window.parent.postMessage({type:'tdrModal',modal:'signup'},'*');}
+const PREVIEW_COUNT=6;
+let expanded=false;
+
+function ini(name){return(name.replace(/[^a-zA-Z\s]/g,'').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2))||name.slice(0,2).toUpperCase();}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function makeCard(b,i,offset=0){
+  const card=document.createElement('a');
+  card.className='brand-card';
+  card.href=b.url;
+  card.target='_blank';
+  card.rel='noopener';
+  card.style.animationDelay=Math.min((i+offset)*0.04,0.5)+'s';
+  card.innerHTML=`<div class="card-body">
+    <div class="card-row">
+      <div class="card-av">${ini(b.name)}</div>
+      <div class="card-samples-tag">📦 Free Samples</div>
+    </div>
+    <div class="card-name">${esc(b.name)}</div>
+    <div class="card-boost">🔥💰 +1–3% boosted commission</div>
+    <div class="card-cta"><span>🛍️ Add to Showcase</span><span class="cta-arr">↗</span></div>
+  </div>
+  <div class="card-flash">✓ &nbsp;Link Copied!</div>`;
+  let t;
+  card.addEventListener('touchstart',()=>{t=setTimeout(()=>copyLink(b.url,b.name,card),500)},{passive:true});
+  card.addEventListener('touchend',()=>clearTimeout(t),{passive:true});
+  card.addEventListener('touchmove',()=>clearTimeout(t),{passive:true});
+  card.addEventListener('contextmenu',e=>{e.preventDefault();copyLink(b.url,b.name,card)});
+  return card;
+}
+
+function copyLink(url,name,card){
+  navigator.clipboard.writeText(url).then(()=>{
+    const f=card.querySelector('.card-flash');f.classList.add('show');
+    setTimeout(()=>f.classList.remove('show'),900);
+    showToast('✓  Copied — '+name,'ok');
+  }).catch(()=>showToast('⚠️  Couldn\'t copy','warn'));
+}
+let toastT;
+function showToast(msg,type){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='show '+type;
+  clearTimeout(toastT);toastT=setTimeout(()=>{t.className=''},2600);
+}
+
+function renderPreview(brands){
+  const g=document.getElementById('brandPreviewGrid');g.innerHTML='';
+  brands.slice(0,PREVIEW_COUNT).forEach((b,i)=>g.appendChild(makeCard(b,i)));
+  document.getElementById('brandTotalEl').textContent=brands.length;
+  document.getElementById('brandCountEl').textContent=brands.length;
+}
+
+function renderAll(brands){
+  const c=document.getElementById('brandCatalogue');c.innerHTML='';
+  brands.forEach((b,i)=>c.appendChild(makeCard(b,i)));
+}
+
+// init
+renderPreview(BRANDS);
+
+document.getElementById('showAllBtn').addEventListener('click',()=>{
+  expanded=true;
+  document.getElementById('brandPreviewWrap').style.display='none';
+  renderAll(BRANDS);
+  document.getElementById('brandCatalogue').style.display='grid';
+  document.getElementById('collapseBtn').classList.add('vis');
+  document.getElementById('brandEmpty').style.display='none';
+  setTimeout(sendHeight,300);
+});
+
+function collapseBrands(){
+  expanded=false;
+  document.getElementById('brandCatalogue').style.display='none';
+  document.getElementById('brandCatalogue').innerHTML='';
+  document.getElementById('brandPreviewWrap').style.display='';
+  document.getElementById('collapseBtn').classList.remove('vis');
+  document.getElementById('brandSearch').value='';
+  document.getElementById('brandClear').classList.remove('vis');
+  document.getElementById('brandCountEl').textContent=BRANDS.length;
+  renderPreview(BRANDS);
+  setTimeout(sendHeight,300);
+}
+
+// Search
+const searchEl=document.getElementById('brandSearch');
+const clearEl=document.getElementById('brandClear');
+searchEl.addEventListener('input',function(){
+  const q=this.value.trim().toLowerCase();
+  clearEl.classList.toggle('vis',q.length>0);
+  const filtered=q?BRANDS.filter(b=>b.name.toLowerCase().includes(q)):BRANDS;
+  document.getElementById('brandCountEl').textContent=filtered.length;
+  const empty=document.getElementById('brandEmpty');
+  if(!filtered.length){
+    document.getElementById('brandPreviewWrap').style.display='none';
+    document.getElementById('brandCatalogue').style.display='none';
+    empty.style.display='block';
+    document.getElementById('collapseBtn').classList.remove('vis');
+    setTimeout(sendHeight,100);return;
+  }
+  empty.style.display='none';
+  if(q){
+    document.getElementById('brandPreviewWrap').style.display='none';
+    renderAll(filtered);
+    document.getElementById('brandCatalogue').style.display='grid';
+    document.getElementById('collapseBtn').classList.remove('vis');
+  } else {
+    document.getElementById('brandCatalogue').style.display='none';
+    document.getElementById('brandPreviewWrap').style.display='';
+    renderPreview(BRANDS);
+    if(expanded){
+      document.getElementById('showAllBtn').click();
+    }
+  }
+  setTimeout(sendHeight,100);
+});
+clearEl.addEventListener('click',()=>{searchEl.value='';searchEl.dispatchEvent(new Event('input'));searchEl.focus();});
 
 // Height reporter
 function sendHeight(){window.parent.postMessage({type:'tdrLbHeight',height:document.body.scrollHeight},'*');}
