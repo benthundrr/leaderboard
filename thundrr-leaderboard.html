@@ -748,3 +748,12 @@ renderBrands();
 document.getElementById('tdrLbBrandSearch').addEventListener('input',e=>renderBrands(e.target.value));
 })();
 </script>
+
+<script>
+function tdrSendHeight(){
+  window.parent.postMessage({type:"tdrLbHeight",height:document.body.scrollHeight},"*");
+}
+window.addEventListener("load",tdrSendHeight);
+window.addEventListener("resize",tdrSendHeight);
+document.addEventListener("click",function(){setTimeout(tdrSendHeight,700)});
+</script>
