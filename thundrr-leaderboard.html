@@ -77,10 +77,6 @@ h1 em{font-style:normal;color:var(--pink)}
 #showAllBtn:hover .show-arr{transform:translateY(3px)}
 
 /* sticky collapse button */
-#collapseBtnWrap{display:none;position:sticky;top:0;z-index:9998;text-align:center;padding:10px 0 6px;background:linear-gradient(to bottom,var(--bg) 75%,transparent);pointer-events:none}
-#collapseBtnWrap.vis{display:block}
-#collapseBtn{pointer-events:all;display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--surface2);border:1.5px solid rgba(252,3,65,.35);border-radius:var(--pill);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:var(--text);cursor:pointer;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 4px 28px rgba(0,0,0,.8),0 0 0 1px rgba(252,3,65,.2);transition:all .2s var(--e);white-space:nowrap}
-#collapseBtn:hover{background:var(--surface3);border-color:rgba(252,3,65,.5)}
 /* empty state */
 .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;font-weight:500}
 
@@ -218,7 +214,7 @@ h1 em{font-style:normal;color:var(--pink)}
   </div>
 </div>
 <div id="brandCatalogue"></div>
-<div id="collapseBtnWrap"><button id="collapseBtn" onclick="collapseBrands()">↑ Collapse Brands</button></div>
+
 <div id="brandEmpty" class="empty-state" style="display:none">😶 No brands match your search</div>
 
 <hr class="divider">
@@ -562,7 +558,7 @@ document.getElementById('showAllBtn').addEventListener('click',()=>{
   document.getElementById('brandPreviewWrap').style.display='none';
   renderAll(BRANDS);
   document.getElementById('brandCatalogue').style.display='grid';
-  document.getElementById('collapseBtnWrap').classList.add('vis');
+  window.parent.postMessage({type:'tdrCollapseBtn',action:'show'},'*');
   document.getElementById('brandEmpty').style.display='none';
   setTimeout(sendHeight,300);
 });
@@ -572,7 +568,7 @@ function collapseBrands(){
   document.getElementById('brandCatalogue').style.display='none';
   document.getElementById('brandCatalogue').innerHTML='';
   document.getElementById('brandPreviewWrap').style.display='';
-  document.getElementById('collapseBtnWrap').classList.remove('vis');
+  window.parent.postMessage({type:'tdrCollapseBtn',action:'hide'},'*');
   document.getElementById('brandSearch').value='';
   document.getElementById('brandClear').classList.remove('vis');
   document.getElementById('brandCountEl').textContent=BRANDS.length;
@@ -593,7 +589,7 @@ searchEl.addEventListener('input',function(){
     document.getElementById('brandPreviewWrap').style.display='none';
     document.getElementById('brandCatalogue').style.display='none';
     empty.style.display='block';
-    document.getElementById('collapseBtnWrap').classList.remove('vis');
+    window.parent.postMessage({type:'tdrCollapseBtn',action:'hide'},'*');
     setTimeout(sendHeight,100);return;
   }
   empty.style.display='none';
@@ -601,7 +597,7 @@ searchEl.addEventListener('input',function(){
     document.getElementById('brandPreviewWrap').style.display='none';
     renderAll(filtered);
     document.getElementById('brandCatalogue').style.display='grid';
-    document.getElementById('collapseBtnWrap').classList.remove('vis');
+    window.parent.postMessage({type:'tdrCollapseBtn',action:'hide'},'*');
   } else {
     document.getElementById('brandCatalogue').style.display='none';
     document.getElementById('brandPreviewWrap').style.display='';
@@ -616,6 +612,7 @@ clearEl.addEventListener('click',()=>{searchEl.value='';searchEl.dispatchEvent(n
 
 // Height reporter
 function sendHeight(){window.parent.postMessage({type:'tdrLbHeight',height:document.body.scrollHeight},'*');}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='tdrCollapse')collapseBrands();});
 window.addEventListener('load',sendHeight);
 window.addEventListener('resize',sendHeight);
 document.addEventListener('click',function(){setTimeout(sendHeight,700);});
