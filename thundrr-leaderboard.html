@@ -144,7 +144,7 @@ h1 em{font-style:normal;color:var(--pink)}
 .lb-foot strong{color:var(--text);font-weight:800}
 
 /* ── SIGNUP BTN ── */
-.btn-signup{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:var(--pill);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:#fc0341;color:#fff;border:1px solid #fc0341;box-shadow:0 8px 24px rgba(252,3,65,.3);width:100%;transition:transform .3s var(--e),background .2s,color .2s;margin-top:28px;animation:up .5s .3s ease both}
+.btn-signup{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:var(--pill);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:#fc0341;color:#fff;border:1px solid #fc0341;box-shadow:0 8px 24px rgba(252,3,65,.3);width:100%;transition:transform .3s var(--e),background .2s,color .2s;margin-top:20px;animation:up .5s .15s ease both;max-width:380px;margin-left:auto;margin-right:auto}
 .btn-signup:hover{background:#fff;color:#0c0c0c;transform:translateY(-2px)}
 
 /* ── TOAST ── */
@@ -181,6 +181,7 @@ h1 em{font-style:normal;color:var(--pink)}
   <div class="eyebrow"><span class="eyebrow-dot"></span>Thundrr × TAP Campaign</div>
   <h1>Thundrr<br><em>Leaderboard</em></h1>
   <p class="header-sub">Top creators driving GMV through Thundrr-linked TAP products. <strong>Updated every Friday.</strong></p>
+  <button class="btn-signup" onclick="window.parent.postMessage({type:'tdrModal',modal:'signup'},'*')">🏆 Sign Up to Compete →</button>
 </header>
 
 <!-- TIMER -->
@@ -237,7 +238,6 @@ h1 em{font-style:normal;color:var(--pink)}
 </button>
 <div class="lb-foot">Only creators using <strong>Thundrr-linked TAP products</strong> qualify.<br>Standings refresh every Friday at 12:00 PM PST.</div>
 
-<button class="btn-signup" onclick="window.parent.postMessage({type:'tdrModal',modal:'signup'},'*')">🏆 Sign Up to Compete →</button>
 
 <div class="footer">THUNDRR SHOP · TAP CAMPAIGN 2026 · ALL BRANDS HAVE FREE SAMPLES</div>
 </div>
