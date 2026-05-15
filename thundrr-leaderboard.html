@@ -14,7 +14,8 @@
   --border-pink:rgba(252,3,65,0.25);--text:#f5f5f8;--muted:rgba(245,245,248,0.45);
   --faint:rgba(245,245,248,0.12);--green:#00e87a;--green-subtle:rgba(0,232,122,0.08);
   --gold:#ffcc00;--gold-subtle:rgba(255,204,0,0.08);--r:14px;
-  --red:#ff0d4a;--pill:100px;--e:cubic-bezier(.16,1,.3,1);--eb:cubic-bezier(.34,1.56,.64,1)
+  --red:#ff0d4a;--pill:100px;--e:cubic-bezier(.16,1,.3,1);--eb:cubic-bezier(.34,1.56,.64,1);
+  --orange:#ff6b2b;--orange-subtle:rgba(255,107,43,0.08);--orange-border:rgba(255,107,43,0.25);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -28,6 +29,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 @keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(0.97)}to{opacity:1;transform:none}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
 
 .page{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 18px 80px}
 
@@ -45,6 +47,21 @@ h1 em{font-style:normal;color:var(--pink)}
 .timer-label{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,245,248,.3)}
 .timer-val{font-size:13px;font-weight:800;color:var(--pink);padding:7px 14px;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:var(--pill);letter-spacing:.04em;font-variant-numeric:tabular-nums}
 
+/* ── TABS ── */
+.tabs-wrap{margin-bottom:20px;animation:up .6s .11s ease both}
+.tabs{display:flex;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:4px;gap:4px}
+.tab-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 14px;border-radius:10px;border:none;background:transparent;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--muted);cursor:pointer;transition:all .22s var(--eb);white-space:nowrap}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.tab-btn.active{background:var(--surface3);color:var(--text);border:1px solid var(--border)}
+.tab-btn.active.tab-all{color:var(--text)}
+.tab-btn.active.tab-trending{color:var(--orange);border-color:var(--orange-border);background:var(--orange-subtle)}
+.tab-icon{font-size:14px}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.07);border-radius:6px;padding:2px 6px;font-size:9px;font-weight:800;min-width:22px}
+.tab-btn.active.tab-trending .tab-badge{background:rgba(255,107,43,.18);color:var(--orange)}
+
+/* ── TRENDING TAG ── */
+.trending-tag{display:inline-flex;align-items:center;gap:4px;background:var(--orange-subtle);border:1px solid var(--orange-border);border-radius:var(--pill);padding:3px 8px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);white-space:nowrap}
+
 /* ── SEARCH ── */
 .search-wrap{margin-bottom:16px;animation:up .6s .12s ease both}
 .search-box{position:relative;display:flex;align-items:center}
@@ -61,11 +78,14 @@ h1 em{font-style:normal;color:var(--pink)}
 .brand-count em{color:var(--text);font-style:normal}
 .brand-section-label{font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);display:flex;align-items:center;gap:6px}
 .brand-section-label::before{content:"";width:4px;height:4px;background:var(--pink);border-radius:50%;animation:pulse 1.5s ease infinite}
+.brand-section-label.trending-label{color:var(--orange)}
+.brand-section-label.trending-label::before{background:var(--orange);animation:pulse 1.5s ease infinite}
 
 /* ── BRAND CARDS ── */
 .brand-preview-wrap{position:relative;animation:up .6s .16s ease both}
 #brandPreviewGrid,#brandCatalogue{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px}
 #brandCatalogue{display:none}
+#trendingGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px}
 
 .preview-fade{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to bottom,transparent 0%,var(--bg) 70%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;pointer-events:none}
 .preview-fade.gone{display:none}
@@ -76,15 +96,27 @@ h1 em{font-style:normal;color:var(--pink)}
 .show-arr{font-size:16px;transition:transform .3s var(--eb)}
 #showAllBtn:hover .show-arr{transform:translateY(3px)}
 
-/* sticky collapse button */
 /* empty state */
 .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;font-weight:500}
 
-/* THE CARDS — exact style from Thundrr Shop */
+/* THE CARDS */
 .brand-card{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;display:block;transition:transform .22s var(--eb),border-color .2s,box-shadow .2s;animation:cardIn .35s ease both;cursor:pointer}
 .brand-card:hover{transform:translateY(-4px) scale(1.015);border-color:var(--border-pink);box-shadow:0 14px 40px rgba(252,3,65,.14),0 4px 12px rgba(0,0,0,.5)}
 .brand-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(252,3,65,.05) 0%,transparent 55%);opacity:0;transition:opacity .22s;pointer-events:none}
 .brand-card:hover::after{opacity:1}
+
+/* Trending card variant */
+.brand-card.trending-card{border-color:var(--orange-border)}
+.brand-card.trending-card:hover{border-color:var(--orange);box-shadow:0 14px 40px rgba(255,107,43,.18),0 4px 12px rgba(0,0,0,.5)}
+.brand-card.trending-card::after{background:linear-gradient(135deg,rgba(255,107,43,.07) 0%,transparent 55%)}
+.trending-card .card-av{color:var(--orange)}
+.trending-card .card-cta{background:var(--orange);box-shadow:0 4px 16px rgba(255,107,43,.35)}
+.brand-card.trending-card:hover .card-cta{background:#ff8a4a;box-shadow:0 6px 22px rgba(255,107,43,.5)}
+
+/* Trending shimmer badge */
+.trending-shimmer{display:inline-flex;align-items:center;gap:4px;background:var(--orange-subtle);border:1px solid var(--orange-border);border-radius:var(--pill);padding:3px 9px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);white-space:nowrap;position:relative;overflow:hidden}
+.trending-shimmer::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,107,43,.2) 50%,transparent 100%);background-size:200% 100%;animation:shimmer 2.4s linear infinite}
+
 .card-body{padding:16px;display:flex;flex-direction:column;gap:10px}
 .card-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .card-av{width:40px;height:40px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;letter-spacing:-.03em;color:var(--pink);flex-shrink:0}
@@ -97,6 +129,7 @@ h1 em{font-style:normal;color:var(--pink)}
 .brand-card:hover .cta-arr{transform:translate(2px,-2px)}
 .card-flash{position:absolute;inset:0;background:var(--pink);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;letter-spacing:.04em;gap:8px;opacity:0;pointer-events:none;border-radius:var(--r);transition:opacity .15s}
 .card-flash.show{opacity:1}
+.trending-card .card-flash{background:var(--orange)}
 
 /* ── DIVIDER ── */
 .divider{margin:32px 0;border:none;border-top:1px solid var(--border)}
@@ -155,20 +188,32 @@ h1 em{font-style:normal;color:var(--pink)}
 
 .footer{text-align:center;padding:40px 0 0;font-size:11px;font-weight:600;color:var(--faint);letter-spacing:.05em}
 
+/* Tab panels */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* Trending intro banner */
+.trending-banner{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(255,107,43,.1) 0%,rgba(255,107,43,.04) 100%);border:1.5px solid var(--orange-border);border-radius:var(--r);padding:14px 16px;margin-bottom:20px;animation:up .4s ease both}
+.trending-banner-icon{font-size:28px;flex-shrink:0}
+.trending-banner-text{}
+.trending-banner-title{font-size:13px;font-weight:800;color:var(--orange);letter-spacing:.03em;margin-bottom:3px}
+.trending-banner-desc{font-size:11px;font-weight:500;color:var(--muted);line-height:1.5}
+
 @media(max-width:560px){
   .page{padding:0 14px 60px}
   .header{padding:56px 0 0}
   h1{font-size:38px}
-  #brandPreviewGrid,#brandCatalogue{grid-template-columns:1fr 1fr;gap:10px}
+  #brandPreviewGrid,#brandCatalogue,#trendingGrid{grid-template-columns:1fr 1fr;gap:10px}
   .card-body{padding:12px;gap:8px}
   .card-av{width:34px;height:34px;font-size:11px}
   .card-name{font-size:13px}
   .card-boost{font-size:10px;padding:5px 8px}
   .card-cta{font-size:11px;padding:9px 10px}
-  .card-samples-tag{font-size:8px}
+  .card-samples-tag,.trending-shimmer{font-size:8px}
   .lb-row{grid-template-columns:38px 1fr auto;gap:10px;padding:12px 13px}
   .lb-rank{width:34px;height:34px;font-size:14px}
   .lb-handle{font-size:13px}.lb-gmv{font-size:17px}
+  .tab-btn{font-size:10px;padding:10px 8px;gap:5px}
 }
 </style>
 </head>
@@ -191,32 +236,66 @@ h1 em{font-style:normal;color:var(--pink)}
   <span class="timer-label">· May 14 · 12 AM PST</span>
 </div>
 
-<!-- BRAND SEARCH -->
-<div class="search-wrap">
-  <div class="search-box">
-    <svg class="s-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input id="brandSearch" type="text" placeholder="Search 200+ campaign brands…" autocomplete="off" autocorrect="off" spellcheck="false">
-    <button id="brandClear" aria-label="Clear">✕</button>
-  </div>
-</div>
-<div class="brand-bar">
-  <div class="brand-section-label">Spring / Summer 2026 · Campaign Products</div>
-  <span class="brand-count"><em id="brandCountEl">0</em> brands</span>
-</div>
-
-<!-- BRAND CARDS -->
-<div class="brand-preview-wrap" id="brandPreviewWrap">
-  <div id="brandPreviewGrid"></div>
-  <div class="preview-fade" id="previewFade">
-    <button id="showAllBtn">
-      <span>View All <em id="brandTotalEl"></em> Brands 🔥</span>
-      <span class="show-arr">↓</span>
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn tab-all active" data-tab="all" onclick="switchTab('all')">
+      <span class="tab-icon">🛍️</span>
+      <span>All Brands</span>
+      <span class="tab-badge" id="tabBadgeAll">0</span>
+    </button>
+    <button class="tab-btn tab-trending" data-tab="trending" onclick="switchTab('trending')">
+      <span class="tab-icon">🔥</span>
+      <span>Top Trending</span>
+      <span class="tab-badge" id="tabBadgeTrending">15</span>
     </button>
   </div>
 </div>
-<div id="brandCatalogue"></div>
 
-<div id="brandEmpty" class="empty-state" style="display:none">😶 No brands match your search</div>
+<!-- TAB PANEL: ALL BRANDS -->
+<div class="tab-panel active" id="panel-all">
+  <!-- BRAND SEARCH -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg class="s-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="brandSearch" type="text" placeholder="Search 200+ campaign brands…" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button id="brandClear" aria-label="Clear">✕</button>
+    </div>
+  </div>
+  <div class="brand-bar">
+    <div class="brand-section-label">Spring / Summer 2026 · Campaign Products</div>
+    <span class="brand-count"><em id="brandCountEl">0</em> brands</span>
+  </div>
+
+  <!-- BRAND CARDS -->
+  <div class="brand-preview-wrap" id="brandPreviewWrap">
+    <div id="brandPreviewGrid"></div>
+    <div class="preview-fade" id="previewFade">
+      <button id="showAllBtn">
+        <span>View All <em id="brandTotalEl"></em> Brands 🔥</span>
+        <span class="show-arr">↓</span>
+      </button>
+    </div>
+  </div>
+  <div id="brandCatalogue"></div>
+  <div id="brandEmpty" class="empty-state" style="display:none">😶 No brands match your search</div>
+</div>
+
+<!-- TAB PANEL: TOP TRENDING -->
+<div class="tab-panel" id="panel-trending">
+  <div class="trending-banner">
+    <div class="trending-banner-icon">🔥</div>
+    <div class="trending-banner-text">
+      <div class="trending-banner-title">Top Trending TAP Products</div>
+      <div class="trending-banner-desc">Hand-picked top-performing products by category. These are the highest-converting opportunities right now — add them to your showcase and start earning.</div>
+    </div>
+  </div>
+  <div class="brand-bar">
+    <div class="brand-section-label trending-label">15 Categories · Top Picks Only</div>
+    <span class="brand-count"><em>15</em> products</span>
+  </div>
+  <div id="trendingGrid"></div>
+</div>
 
 <hr class="divider">
 
@@ -237,7 +316,6 @@ h1 em{font-style:normal;color:var(--pink)}
   <span class="chev">▾</span>
 </button>
 <div class="lb-foot">Only creators using <strong>Thundrr-linked TAP products</strong> qualify.<br>Standings refresh every Friday at 12:00 PM PST.</div>
-
 
 <div class="footer">THUNDRR SHOP · TAP CAMPAIGN 2026 · ALL BRANDS HAVE FREE SAMPLES</div>
 </div>
@@ -271,7 +349,33 @@ expBtn.addEventListener('click',()=>{
   setTimeout(sendHeight,700);
 });
 
-// ── Brands ──
+// ── Tab switching ──
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+tab));
+  setTimeout(sendHeight,100);
+}
+
+// ── Trending Products ──
+const TRENDING=[
+  {name:"Top Health",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhXfTWXubZ",cat:"Health"},
+  {name:"Top Food & Beverage",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhYJMwRNuu",cat:"Food & Beverage"},
+  {name:"Top Auto",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhXFaC7fjY",cat:"Automotive"},
+  {name:"Top Home Improvement",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhVJf6tEAu",cat:"Home Improvement"},
+  {name:"Top Furniture",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhWOZOvkpX",cat:"Furniture"},
+  {name:"Top Sports & Outdoor",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhUvDMpuBj",cat:"Sports & Outdoor"},
+  {name:"Top Electronics",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhW7uWlN7k",cat:"Electronics"},
+  {name:"Top Pet",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhUirTVTW6",cat:"Pet"},
+  {name:"Top Fragrance",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhURNfi6XK",cat:"Fragrance"},
+  {name:"Top Bath & Body",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhUJUu6Tjf",cat:"Bath & Body"},
+  {name:"Top Hair",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhTqfaKh8a",cat:"Hair"},
+  {name:"Top Household",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhTAX80nUI",cat:"Household"},
+  {name:"Top Kitchen",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhSGcrNszl",cat:"Kitchen"},
+  {name:"Top Skincare",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhPzsF0U1A",cat:"Skincare"},
+  {name:"Top Makeup",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhRH9hZwxX",cat:"Makeup"},
+];
+
+// ── All Brands ──
 const BRANDS=[
   {name:"COSRX",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBR6X9Ol6O"},
   {name:"Olay",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf0hXC70I1"},
@@ -510,25 +614,45 @@ const BRANDS=[
   {name:"Bagsmart",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDg7SlbY5iT"},
   {name:"PetPivot",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDHqPwuchWj"},
   {name:"R & W Co",url:"https://affiliate-us.tiktok.com/api/v1/share/AJAINgFYd0XT"},
+  // ── NEW TRENDING (also in All Brands) ──
+  {name:"Top Health",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhXfTWXubZ"},
+  {name:"Top Food & Beverage",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhYJMwRNuu"},
+  {name:"Top Auto",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhXFaC7fjY"},
+  {name:"Top Home Improvement",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhVJf6tEAu"},
+  {name:"Top Furniture",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhWOZOvkpX"},
+  {name:"Top Sports & Outdoor",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhUvDMpuBj"},
+  {name:"Top Electronics",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhW7uWlN7k"},
+  {name:"Top Pet",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhUirTVTW6"},
+  {name:"Top Fragrance",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhURNfi6XK"},
+  {name:"Top Bath & Body",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhUJUu6Tjf"},
+  {name:"Top Hair",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhTqfaKh8a"},
+  {name:"Top Household",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhTAX80nUI"},
+  {name:"Top Kitchen",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhSGcrNszl"},
+  {name:"Top Skincare",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhPzsF0U1A"},
+  {name:"Top Makeup",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhRH9hZwxX"},
 ];
 
+const TRENDING_NAMES=new Set(TRENDING.map(t=>t.name));
 const PREVIEW_COUNT=6;
 let expanded=false;
 
 function ini(name){return(name.replace(/[^a-zA-Z\s]/g,'').trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2))||name.slice(0,2).toUpperCase();}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-function makeCard(b,i,offset=0){
+function makeCard(b,i,offset=0,isTrending=false){
   const card=document.createElement('a');
-  card.className='brand-card';
+  card.className='brand-card'+(isTrending?' trending-card':'');
   card.href=b.url;
   card.target='_blank';
   card.rel='noopener';
   card.style.animationDelay=Math.min((i+offset)*0.04,0.5)+'s';
+  const topTag=isTrending
+    ?`<div class="trending-shimmer">🔥 Top Trending</div>`
+    :(TRENDING_NAMES.has(b.name)?`<div class="trending-shimmer">🔥 Top Trending</div>`:`<div class="card-samples-tag">📦 Free Samples</div>`);
   card.innerHTML=`<div class="card-body">
     <div class="card-row">
       <div class="card-av">${ini(b.name)}</div>
-      <div class="card-samples-tag">📦 Free Samples</div>
+      ${topTag}
     </div>
     <div class="card-name">${esc(b.name)}</div>
     <div class="card-boost">🔥💰 +1–3% boosted commission</div>
@@ -568,8 +692,15 @@ function renderAll(brands){
   brands.forEach((b,i)=>c.appendChild(makeCard(b,i)));
 }
 
-// init
+function renderTrending(){
+  const g=document.getElementById('trendingGrid');g.innerHTML='';
+  TRENDING.forEach((b,i)=>g.appendChild(makeCard(b,i,0,true)));
+}
+
+// Init
+document.getElementById('tabBadgeAll').textContent=BRANDS.length;
 renderPreview(BRANDS);
+renderTrending();
 
 document.getElementById('showAllBtn').addEventListener('click',()=>{
   expanded=true;
@@ -620,9 +751,7 @@ searchEl.addEventListener('input',function(){
     document.getElementById('brandCatalogue').style.display='none';
     document.getElementById('brandPreviewWrap').style.display='';
     renderPreview(BRANDS);
-    if(expanded){
-      document.getElementById('showAllBtn').click();
-    }
+    if(expanded)document.getElementById('showAllBtn').click();
   }
   setTimeout(sendHeight,100);
 });
