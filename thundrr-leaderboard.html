@@ -148,7 +148,7 @@ h1 em{font-style:normal;color:var(--pink)}
 .lb-live::before{content:"";width:5px;height:5px;background:var(--pink);border-radius:50%;animation:pulse 1.5s ease infinite}
 .lb-list,.lb-rest{display:flex;flex-direction:column;gap:8px;text-align:left;animation:up .5s .22s ease both}
 .lb-rest{max-height:0;overflow:hidden;transition:max-height .6s var(--e),margin-top .5s}
-.lb-rest.open{max-height:1200px;margin-top:8px}
+.lb-rest.open{max-height:2400px;margin-top:8px}
 .lb-row{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);transition:transform .3s var(--e),border-color .2s}
 .lb-row:hover{transform:translateY(-2px);border-color:var(--border-pink)}
 .lb-row.r1{border-color:rgba(255,204,0,.2)}.lb-row.r2{border-color:rgba(216,216,224,.12)}.lb-row.r3{border-color:rgba(230,155,107,.16)}
@@ -254,7 +254,6 @@ h1 em{font-style:normal;color:var(--pink)}
 
 <!-- TAB PANEL: ALL BRANDS -->
 <div class="tab-panel active" id="panel-all">
-  <!-- BRAND SEARCH -->
   <div class="search-wrap">
     <div class="search-box">
       <svg class="s-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -266,8 +265,6 @@ h1 em{font-style:normal;color:var(--pink)}
     <div class="brand-section-label">Spring / Summer 2026 · Campaign Products</div>
     <span class="brand-count"><em id="brandCountEl">0</em> brands</span>
   </div>
-
-  <!-- BRAND CARDS -->
   <div class="brand-preview-wrap" id="brandPreviewWrap">
     <div id="brandPreviewGrid"></div>
     <div class="preview-fade" id="previewFade">
@@ -306,7 +303,7 @@ h1 em{font-style:normal;color:var(--pink)}
   <p class="lb-deck">Ranked by TAP campaign GMV through Thundrr-linked products.</p>
 </div>
 <div class="lb-bar">
-  <span class="lb-week">Week 01 // Pre-launch</span>
+  <span class="lb-week">Week 01 // May 2026</span>
   <span class="lb-live">Fridays</span>
 </div>
 <div class="lb-list" id="lbTop"></div>
@@ -333,11 +330,24 @@ function tick(){
 }
 tick();setInterval(tick,1000);
 
-// ── Leaderboard ──
-const LB=[{},{},{},{},{},{},{},{},{},{}];
+// ── Leaderboard Data ──
+// Top 10 only (sorted by GMV descending, then by signup order for $0)
+const LB=[
+  {handle:'mimi_tess3',gmv:1292.95,tag:'TAP creator'},
+  {handle:'Ashley_linn',gmv:26.57,tag:'TAP creator'},
+  {handle:'Joaniebologna80',gmv:19.98,tag:'TAP creator'},
+  {handle:'alliekreidtswift',gmv:0,tag:'TAP creator'},
+  {handle:'Bossmum.society',gmv:0,tag:'TAP creator'},
+  {handle:'Terriblychicmini',gmv:0,tag:'TAP creator'},
+  {handle:'Justjackie47',gmv:0,tag:'TAP creator'},
+  {handle:'Kristinapecore',gmv:0,tag:'TAP creator'},
+  {handle:'tdawg77785',gmv:0,tag:'TAP creator'},
+  {handle:'DadlifeUGC',gmv:0,tag:'TAP creator'},
+];
+
 function buildRow(c,i){
-  const rank=i+1,rc=rank<=3?' r'+rank:'',p=!c.handle?' pending':'';
-  return'<div class="lb-row'+rc+p+'"><div class="lb-rank">'+rank+'</div><div class="lb-info">'+(p?'<span class="lb-handle empty">// Pending Spot</span>':'<span class="lb-handle"><span class="at">@</span>'+c.handle+'</span>')+'<div class="lb-tag">Rank #'+rank+'<span class="dot"></span>'+(p?'Awaiting first sale':(c.tag||'TAP creator'))+'</div></div><div class="lb-gmv-wrap">'+(p?'<div class="lb-gmv">—</div><div class="lb-gmv-sub">No GMV yet</div>':'<div class="lb-gmv"><span class="cur">$</span>'+c.gmv.toLocaleString()+'</div><div class="lb-gmv-sub">TAP GMV</div>')+'</div></div>';
+  const rank=i+1,rc=rank<=3?' r'+rank:'',p=c.gmv===0?' pending':'';
+  return'<div class="lb-row'+rc+p+'"><div class="lb-rank">'+rank+'</div><div class="lb-info">'+(p&&!c.handle?'<span class="lb-handle empty">// Pending Spot</span>':'<span class="lb-handle"><span class="at">@</span>'+c.handle+'</span>')+'<div class="lb-tag">Rank #'+rank+'<span class="dot"></span>'+(p?'Awaiting first sale':(c.tag||'TAP creator'))+'</div></div><div class="lb-gmv-wrap">'+(p?'<div class="lb-gmv" style="font-size:15px;color:rgba(245,245,248,.2)">—</div><div class="lb-gmv-sub">No GMV yet</div>':'<div class="lb-gmv"><span class="cur">$</span>'+c.gmv.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})+'</div><div class="lb-gmv-sub">TAP GMV</div>')+'</div></div>';
 }
 document.getElementById('lbTop').innerHTML=LB.slice(0,3).map(buildRow).join('');
 document.getElementById('lbRest').innerHTML=LB.slice(3).map((c,i)=>buildRow(c,i+3)).join('');
@@ -600,21 +610,8 @@ const BRANDS=[
   {name:"Joytutus",url:"https://affiliate-us.tiktok.com/api/v1/share/AJNEFtwhi0la"},
   {name:"Yeoreo",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMxxpsZ830f"},
   {name:"Tempro",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMxzVFcD6IY"},
-  {name:"Scutsy",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe3wUSg4o9"},
-  {name:"PrettyGarden",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe3vRSoCYn"},
-  {name:"Dr. Melaxin",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe44cNLsFl"},
-  {name:"Physician's Choice",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMe39cjBpxT"},
   {name:"WNP",url:"https://affiliate-us.tiktok.com/api/v1/share/AIn0qaARFU1g"},
-  {name:"Popilush",url:"https://affiliate-us.tiktok.com/api/v1/share/AJJ2bImxuKAP"},
-  {name:"Automet",url:"https://affiliate-us.tiktok.com/api/v1/share/AJGxB8lQW6y7"},
-  {name:"Evellyhootd",url:"https://affiliate-us.tiktok.com/api/v1/share/AJFIWy1chmOm"},
-  {name:"Halara",url:"https://affiliate-us.tiktok.com/api/v1/share/AJEJG8va3IR0"},
-  {name:"Dossier",url:"https://affiliate-us.tiktok.com/api/v1/share/AJE7TD2KfYJv"},
-  {name:"Dr.Flash",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDxNhpyWIlC"},
-  {name:"Bagsmart",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDg7SlbY5iT"},
-  {name:"PetPivot",url:"https://affiliate-us.tiktok.com/api/v1/share/AJDHqPwuchWj"},
   {name:"R & W Co",url:"https://affiliate-us.tiktok.com/api/v1/share/AJAINgFYd0XT"},
-  // ── NEW TRENDING (also in All Brands) ──
   {name:"Top Health",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhXfTWXubZ"},
   {name:"Top Food & Beverage",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhYJMwRNuu"},
   {name:"Top Auto",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhXFaC7fjY"},
@@ -697,7 +694,6 @@ function renderTrending(){
   TRENDING.forEach((b,i)=>g.appendChild(makeCard(b,i,0,true)));
 }
 
-// Init
 document.getElementById('tabBadgeAll').textContent=BRANDS.length;
 renderPreview(BRANDS);
 renderTrending();
@@ -725,7 +721,6 @@ function collapseBrands(){
   setTimeout(sendHeight,300);
 }
 
-// Search
 const searchEl=document.getElementById('brandSearch');
 const clearEl=document.getElementById('brandClear');
 searchEl.addEventListener('input',function(){
@@ -757,7 +752,6 @@ searchEl.addEventListener('input',function(){
 });
 clearEl.addEventListener('click',()=>{searchEl.value='';searchEl.dispatchEvent(new Event('input'));searchEl.focus();});
 
-// Height reporter
 function sendHeight(){window.parent.postMessage({type:'tdrLbHeight',height:document.body.scrollHeight},'*');}
 window.addEventListener('message',function(e){if(e.data&&e.data.type==='tdrCollapse')collapseBrands();});
 window.addEventListener('load',sendHeight);
