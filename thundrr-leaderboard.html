@@ -33,7 +33,6 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
 .page{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 18px 80px}
 
-/* ── HEADER ── */
 .header{padding:72px 0 0;text-align:center;animation:up .6s ease both}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--pink-subtle);border:1px solid var(--border-pink);border-radius:var(--pill);padding:6px 16px;font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--pink);margin-bottom:20px}
 .eyebrow-dot{width:5px;height:5px;background:var(--pink);border-radius:50%;animation:pulse 2s ease infinite}
@@ -42,12 +41,10 @@ h1 em{font-style:normal;color:var(--pink)}
 .header-sub{font-size:14px;font-weight:500;color:var(--muted);max-width:380px;margin:0 auto 24px;line-height:1.65}
 .header-sub strong{color:var(--text)}
 
-/* ── TIMER ── */
 .timer-wrap{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:32px;animation:up .5s .1s ease both}
 .timer-label{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,245,248,.3)}
 .timer-val{font-size:13px;font-weight:800;color:var(--pink);padding:7px 14px;background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:var(--pill);letter-spacing:.04em;font-variant-numeric:tabular-nums}
 
-/* ── TABS ── */
 .tabs-wrap{margin-bottom:20px;animation:up .6s .11s ease both}
 .tabs{display:flex;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:4px;gap:4px}
 .tab-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 14px;border-radius:10px;border:none;background:transparent;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--muted);cursor:pointer;transition:all .22s var(--eb);white-space:nowrap}
@@ -59,10 +56,8 @@ h1 em{font-style:normal;color:var(--pink)}
 .tab-badge{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.07);border-radius:6px;padding:2px 6px;font-size:9px;font-weight:800;min-width:22px}
 .tab-btn.active.tab-trending .tab-badge{background:rgba(255,107,43,.18);color:var(--orange)}
 
-/* ── TRENDING TAG ── */
 .trending-tag{display:inline-flex;align-items:center;gap:4px;background:var(--orange-subtle);border:1px solid var(--orange-border);border-radius:var(--pill);padding:3px 8px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);white-space:nowrap}
 
-/* ── SEARCH ── */
 .search-wrap{margin-bottom:16px;animation:up .6s .12s ease both}
 .search-box{position:relative;display:flex;align-items:center}
 .s-icon{position:absolute;left:17px;color:var(--muted);pointer-events:none;transition:color .2s}
@@ -81,7 +76,6 @@ h1 em{font-style:normal;color:var(--pink)}
 .brand-section-label.trending-label{color:var(--orange)}
 .brand-section-label.trending-label::before{background:var(--orange);animation:pulse 1.5s ease infinite}
 
-/* ── BRAND CARDS ── */
 .brand-preview-wrap{position:relative;animation:up .6s .16s ease both}
 #brandPreviewGrid,#brandCatalogue{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px}
 #brandCatalogue{display:none}
@@ -96,16 +90,13 @@ h1 em{font-style:normal;color:var(--pink)}
 .show-arr{font-size:16px;transition:transform .3s var(--eb)}
 #showAllBtn:hover .show-arr{transform:translateY(3px)}
 
-/* empty state */
 .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;font-weight:500}
 
-/* THE CARDS */
 .brand-card{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;display:block;transition:transform .22s var(--eb),border-color .2s,box-shadow .2s;animation:cardIn .35s ease both;cursor:pointer}
 .brand-card:hover{transform:translateY(-4px) scale(1.015);border-color:var(--border-pink);box-shadow:0 14px 40px rgba(252,3,65,.14),0 4px 12px rgba(0,0,0,.5)}
 .brand-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(252,3,65,.05) 0%,transparent 55%);opacity:0;transition:opacity .22s;pointer-events:none}
 .brand-card:hover::after{opacity:1}
 
-/* Trending card variant */
 .brand-card.trending-card{border-color:var(--orange-border)}
 .brand-card.trending-card:hover{border-color:var(--orange);box-shadow:0 14px 40px rgba(255,107,43,.18),0 4px 12px rgba(0,0,0,.5)}
 .brand-card.trending-card::after{background:linear-gradient(135deg,rgba(255,107,43,.07) 0%,transparent 55%)}
@@ -113,7 +104,6 @@ h1 em{font-style:normal;color:var(--pink)}
 .trending-card .card-cta{background:var(--orange);box-shadow:0 4px 16px rgba(255,107,43,.35)}
 .brand-card.trending-card:hover .card-cta{background:#ff8a4a;box-shadow:0 6px 22px rgba(255,107,43,.5)}
 
-/* Trending shimmer badge */
 .trending-shimmer{display:inline-flex;align-items:center;gap:4px;background:var(--orange-subtle);border:1px solid var(--orange-border);border-radius:var(--pill);padding:3px 9px;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);white-space:nowrap;position:relative;overflow:hidden}
 .trending-shimmer::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,107,43,.2) 50%,transparent 100%);background-size:200% 100%;animation:shimmer 2.4s linear infinite}
 
@@ -131,10 +121,8 @@ h1 em{font-style:normal;color:var(--pink)}
 .card-flash.show{opacity:1}
 .trending-card .card-flash{background:var(--orange)}
 
-/* ── DIVIDER ── */
 .divider{margin:32px 0;border:none;border-top:1px solid var(--border)}
 
-/* ── LEADERBOARD ── */
 .lb-header{text-align:center;margin-bottom:16px;animation:up .5s .2s ease both}
 .lb-eyebrow{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px}
 .lb-num{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--pink)}
@@ -176,11 +164,9 @@ h1 em{font-style:normal;color:var(--pink)}
 .lb-foot{margin-top:18px;padding-top:16px;border-top:1px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);line-height:1.55;text-align:center}
 .lb-foot strong{color:var(--text);font-weight:800}
 
-/* ── SIGNUP BTN ── */
 .btn-signup{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:var(--pill);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:#fc0341;color:#fff;border:1px solid #fc0341;box-shadow:0 8px 24px rgba(252,3,65,.3);width:100%;transition:transform .3s var(--e),background .2s,color .2s;margin-top:20px;animation:up .5s .15s ease both;max-width:380px;margin-left:auto;margin-right:auto}
 .btn-signup:hover{background:#fff;color:#0c0c0c;transform:translateY(-2px)}
 
-/* ── TOAST ── */
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--pill);padding:11px 22px;font-size:12px;font-weight:700;font-family:'Montserrat',sans-serif;display:flex;align-items:center;gap:8px;opacity:0;transition:all .3s var(--eb);z-index:10000;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.6)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.ok{border-color:rgba(0,232,122,.35);color:var(--green)}
@@ -188,11 +174,9 @@ h1 em{font-style:normal;color:var(--pink)}
 
 .footer{text-align:center;padding:40px 0 0;font-size:11px;font-weight:600;color:var(--faint);letter-spacing:.05em}
 
-/* Tab panels */
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
-/* Trending intro banner */
 .trending-banner{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(255,107,43,.1) 0%,rgba(255,107,43,.04) 100%);border:1.5px solid var(--orange-border);border-radius:var(--r);padding:14px 16px;margin-bottom:20px;animation:up .4s ease both}
 .trending-banner-icon{font-size:28px;flex-shrink:0}
 .trending-banner-text{}
@@ -221,7 +205,6 @@ h1 em{font-style:normal;color:var(--pink)}
 <div class="blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 <div class="page">
 
-<!-- HEADER -->
 <header class="header">
   <div class="eyebrow"><span class="eyebrow-dot"></span>Thundrr × TAP Campaign</div>
   <h1>Thundrr<br><em>Leaderboard</em></h1>
@@ -229,14 +212,12 @@ h1 em{font-style:normal;color:var(--pink)}
   <button class="btn-signup" onclick="window.parent.postMessage({type:'tdrModal',modal:'signup'},'*')">🏆 Sign Up to Compete →</button>
 </header>
 
-<!-- TIMER -->
 <div class="timer-wrap">
   <span class="timer-label">Kicks off</span>
   <span class="timer-val" id="timerVal">--</span>
   <span class="timer-label">· May 14 · 12 AM PST</span>
 </div>
 
-<!-- TABS -->
 <div class="tabs-wrap">
   <div class="tabs">
     <button class="tab-btn tab-all active" data-tab="all" onclick="switchTab('all')">
@@ -252,7 +233,6 @@ h1 em{font-style:normal;color:var(--pink)}
   </div>
 </div>
 
-<!-- TAB PANEL: ALL BRANDS -->
 <div class="tab-panel active" id="panel-all">
   <div class="search-wrap">
     <div class="search-box">
@@ -278,7 +258,6 @@ h1 em{font-style:normal;color:var(--pink)}
   <div id="brandEmpty" class="empty-state" style="display:none">😶 No brands match your search</div>
 </div>
 
-<!-- TAB PANEL: TOP TRENDING -->
 <div class="tab-panel" id="panel-trending">
   <div class="trending-banner">
     <div class="trending-banner-icon">🔥</div>
@@ -296,14 +275,13 @@ h1 em{font-style:normal;color:var(--pink)}
 
 <hr class="divider">
 
-<!-- LEADERBOARD -->
 <div class="lb-header">
   <div class="lb-eyebrow"><span class="lb-num">[01]</span><span class="lb-cat">Live Standings</span></div>
   <h2 class="lb-title">The <em>Top 10</em></h2>
   <p class="lb-deck">Ranked by TAP campaign GMV through Thundrr-linked products.</p>
 </div>
 <div class="lb-bar">
-  <span class="lb-week">Week 01 // May 2026</span>
+  <span class="lb-week">Week 02 // May 2026</span>
   <span class="lb-live">Fridays</span>
 </div>
 <div class="lb-list" id="lbTop"></div>
@@ -319,7 +297,6 @@ h1 em{font-style:normal;color:var(--pink)}
 <div id="toast"></div>
 
 <script>
-// ── Countdown ──
 const TARGET=new Date('2026-05-14T00:00:00-08:00').getTime();
 function pad(n){return n<10?'0'+n:''+n}
 function tick(){
@@ -330,19 +307,17 @@ function tick(){
 }
 tick();setInterval(tick,1000);
 
-// ── Leaderboard Data ──
-// Top 10 only (sorted by GMV descending, then by signup order for $0)
 const LB=[
-  {handle:'mimi_tess3',gmv:1292.95,tag:'TAP creator'},
-  {handle:'Ashley_linn',gmv:26.57,tag:'TAP creator'},
-  {handle:'Joaniebologna80',gmv:19.98,tag:'TAP creator'},
-  {handle:'alliekreidtswift',gmv:0,tag:'TAP creator'},
-  {handle:'Bossmum.society',gmv:0,tag:'TAP creator'},
-  {handle:'Terriblychicmini',gmv:0,tag:'TAP creator'},
-  {handle:'Justjackie47',gmv:0,tag:'TAP creator'},
-  {handle:'Kristinapecore',gmv:0,tag:'TAP creator'},
-  {handle:'tdawg77785',gmv:0,tag:'TAP creator'},
-  {handle:'DadlifeUGC',gmv:0,tag:'TAP creator'},
+  {handle:'mimi_tess3',gmv:1794.26,tag:'TAP creator'},
+  {handle:'Melodiecoxbehnke',gmv:42.50,tag:'TAP creator'},
+  {handle:'UGCCONBREN',gmv:38.48,tag:'TAP creator'},
+  {handle:'Stroudsimplysouthern',gmv:30.00,tag:'TAP creator'},
+  {handle:'YourFairyGlamMama',gmv:24.99,tag:'TAP creator'},
+  {handle:'Justjackie47',gmv:24.28,tag:'TAP creator'},
+  {handle:'Ashley_linn',gmv:21.34,tag:'TAP creator'},
+  {handle:'The_sven_d',gmv:0,tag:'TAP creator'},
+  {handle:'Kwateena',gmv:0,tag:'TAP creator'},
+  {handle:'Joaniebologna80',gmv:0,tag:'TAP creator'},
 ];
 
 function buildRow(c,i){
@@ -359,14 +334,12 @@ expBtn.addEventListener('click',()=>{
   setTimeout(sendHeight,700);
 });
 
-// ── Tab switching ──
 function switchTab(tab){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+tab));
   setTimeout(sendHeight,100);
 }
 
-// ── Trending Products ──
 const TRENDING=[
   {name:"Top Health",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhXfTWXubZ",cat:"Health"},
   {name:"Top Food & Beverage",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhYJMwRNuu",cat:"Food & Beverage"},
@@ -385,7 +358,6 @@ const TRENDING=[
   {name:"Top Makeup",url:"https://affiliate-us.tiktok.com/api/v1/share/AJQhRH9hZwxX",cat:"Makeup"},
 ];
 
-// ── All Brands ──
 const BRANDS=[
   {name:"COSRX",url:"https://affiliate-us.tiktok.com/api/v1/share/AInBR6X9Ol6O"},
   {name:"Olay",url:"https://affiliate-us.tiktok.com/api/v1/share/AJMf0hXC70I1"},
